@@ -1,0 +1,15 @@
+name: spec-probe
+on: workflow_dispatch
+jobs:
+  probe:
+    runs-on: windows-latest
+    steps:
+      - name: print specs
+        shell: pwsh
+        run: |
+          $cs = Get-CimInstance Win32_ComputerSystem
+          "RESULT-CPUS=$($cs.NumberOfLogicalProcessors)"
+          "RESULT-RAMGB=$([math]::Round($cs.TotalPhysicalMemory/1GB,2))"
+          "RESULT-CPU=$(Get-CimInstance Win32_Processor | Select-Object -ExpandProperty Name)"
+          "RESULT-HOST=$env:COMPUTERNAME"
+          "RESULT-USER=$env:USERNAME"
